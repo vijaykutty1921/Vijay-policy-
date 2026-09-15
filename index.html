@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Policy &amp; Investment Manager</title>
+  <style>
+    :root { --primary: #0f172a; --brand: #2563eb; --bg: #f1f5f9; --card: #ffffff; --text: #0f172a; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding-bottom: 70px; }
+    header { background: var(--primary); color: #fff; padding: 16px; text-align: center; font-size: 1.15rem; font-weight: 700; position: sticky; top: 0; z-index: 10; }
+    .container { padding: 14px; max-width: 600px; margin: auto; }
+    .card { background: var(--card); border-radius: 10px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; }
+    h3 { font-size: 1.1rem; margin-bottom: 12px; color: var(--primary); }
+    h4 { font-size: 0.95rem; margin-bottom: 10px; }
+    input, select, button { width: 100%; padding: 10px; margin-top: 4px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.9rem; }
+    button.btn-primary { background: var(--brand); color: #fff; border: none; font-weight: 600; cursor: pointer; }
+    .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 56px; background: #ffffff; display: flex; border-top: 1px solid #cbd5e1; z-index: 20; }
+    .nav-btn { flex: 1; border: none; background: transparent; font-weight: 600; font-size: 0.8rem; color: #64748b; cursor: pointer; }
+    .nav-btn.active { color: var(--brand); border-top: 3px solid var(--brand); }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; }
+    .badge-due { background: #fee2e2; color: #dc2626; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+  <header>Policy &amp; Investment Manager</header>
+
+  <div class="container">
+    <!-- SECTION 1: CUSTOMERS -->
+    <div id="view-customers">
+      <h3>Customer Directory</h3>
+      <div class="card">
+        <h4>Register New Customer</h4>
+        <input id="c_name" placeholder="Full Name" />
+        <input id="c_phone" placeholder="Phone Number" type="tel" />
+        <input id="c_pan" placeholder="PAN Number" />
+        <input id="c_id" placeholder="Government ID / Aadhaar Ref" />
+        <button class="btn-primary" onclick="saveCustomer()">Save Customer</button>
+      </div>
+      <div id="list-customers"></div>
+    </div>
+
+    <!-- SECTION 2: POLICIES -->
+    <div id="view-policies" class="hidden">
+      <h3>Policy Tracking &amp; Renewals</h3>
+      <div class="card">
+        <h4>Add Policy Record</h4>
+        <input id="p_client" placeholder="Customer Name" />
+        <input id="p_company" placeholder="Company (e.g., HDFC Life, LIC)" />
+        <input id="p_no" placeholder="Policy Number" />
+        <input id="p_premium" placeholder="Premium Amount (₹)" type="number" />
+        <label style="font-size: 0.8rem; color: #475569;">Renewal Due Date:</label>
+        <input id="p_due" type="date" />
+        <button class="btn-primary" onclick="savePolicy()">Save Policy</button>
+      </div>
+      <div id="list-policies"></div>
+    </div>
+
+    <!-- SECTION 3: INVESTMENT REVIEW -->
+    <div id="view-review" class="hidden">
+      <h3>Existing Portfolio Review</h3>
+      <div class="card" style="background: #eff6ff; border-color: #bfdbfe;">
+        <div>Total Portfolio Valuation</div>
+        <div id="total-val" style="font-size: 1.6rem; font-weight: 800; color: #1e3a8a; margin: 4px 0;">₹0</div>
+        <small style="color: #16a34a; font-weight: 600;">Status: Tracking Active Assets</small>
+      </div>
+      <div class="card">
+        <h4>Add Asset / Holding</h4>
+        <select id="i_type">
+          <option>Mutual Fund (Equity/Debt)</option>
+          <option>Insurance Cash Value / ULIP</option>
+          <option>Fixed Deposit</option>
+          <option>Direct Equities / Stocks</option>
+        </select>
+        <input id="i_name" placeholder="Fund or Bank Name" />
+        <input id="i_val" placeholder="Current Value (₹)" type="number" />
+        <button class="btn-primary" onclick="saveInvestment()">Add Asset</button>
+      </div>
+      <div id="list-invest"></div>
+    </div>
+
+    <!-- SECTION 4: FUTURE SUGGESTIONS -->
+    <div id="view-advisor" class="hidden">
+      <h3>Future Investment Advisor</h3>
+      <div class="card">
+        <label style="font-weight: 600; font-size: 0.85rem;">Monthly Surplus to Invest (₹):</label>
+        <input id="adv_input" type="number" value="15000" oninput="calculateAdvice()" />
+      </div>
+      <div class="card">
+        <strong>1. Pure Term Protection</strong>
+        <p style="font-size: 0.85rem; color: #475569; margin-top: 4px;">Baseline priority: Ensure life cover of 10x-15x annual income before expanding equities.</p>
+      </div>
+      <div class="card">
+        <strong>2. Equity Mutual Funds (50%)</strong>
+        <div id="adv_equity" style="font-size: 1.1rem; font-weight: 700; color: var(--brand); margin: 4px 0;">₹7,500 / month</div>
+        <p style="font-size: 0.85rem; color: #475569;">Allocate across Flexi-cap &amp; Large-cap index funds for inflation-beating long-term growth.</p>
+      </div>
+      <div class="card">
+        <strong>3. Safe Debt &amp; PPF (30%)</strong>
+        <div id="adv_debt" style="font-size: 1.1rem; font-weight: 700; color: var(--brand); margin: 4px 0;">₹4,500 / month</div>
+        <p style="font-size: 0.85rem; color: #475569;">Capital protection via PPF, Voluntary PF, or Bank FDs.</p>
+      </div>
+      <div class="card">
+        <strong>4. Emergency Reserve (20%)</strong>
+        <div id="adv_emergency" style="font-size: 1.1rem; font-weight: 700; color: var(--brand); margin: 4px 0;">₹3,000 / month</div>
+        <p style="font-size: 0.85rem; color: #475569;">Maintain accessible liquid funds covering 6 months of household expenses.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAVIGATION -->
+  <div class="nav-bar">
+    <button class="nav-btn active" onclick="showTab('customers', this)">Customers</button>
+    <button class="nav-btn" onclick="showTab('policies', this)">Policies</button>
+    <button class="nav-btn" onclick="showTab('review', this)">Review</button>
+    <button class="nav-btn" onclick="showTab('advisor', this)">Advisor</button>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js');
+    }
+
+    let customers = JSON.parse(localStorage.getItem('vpm_cust') || '[]');
+    let policies = JSON.parse(localStorage.getItem('vpm_pol') || '[]');
+    let investments = JSON.parse(localStorage.getItem('vpm_inv') || '[]');
+
+    function showTab(name, btn) {
+      ['customers', 'policies', 'review', 'advisor'].forEach(t => {
+        document.getElementById('view-' + t).classList.add('hidden');
+      });
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('view-' + name).classList.remove('hidden');
+      btn.classList.add('active');
+    }
+
+    function saveCustomer() {
+      const name = document.getElementById('c_name').value.trim();
+      const phone = document.getElementById('c_phone').value.trim();
+      const pan = document.getElementById('c_pan').value.trim();
+      const id = document.getElementById('c_id').value.trim();
+      if (!name) return alert('Name is required');
+      customers.push({ name, phone, pan, id });
+      localStorage.setItem('vpm_cust', JSON.stringify(customers));
+      renderCustomers();
+      document.getElementById('c_name').value = '';
+      document.getElementById('c_phone').value = '';
+      document.getElementById('c_pan').value = '';
+      document.getElementById('c_id').value = '';
+    }
+
+    function renderCustomers() {
+      document.getElementById('list-customers').innerHTML = customers.map(c => `
+        <div class="card">
+          <strong>${c.name}</strong><br>
+          <small>Phone: ${c.phone || 'N/A'} | PAN: ${c.pan || 'N/A'}</small>
+        </div>
+      `).join('');
+    }
+
+    function savePolicy() {
+      const client = document.getElementById('p_client').value.trim();
+      const company = document.getElementById('p_company').value.trim();
+      const no = document.getElementById('p_no').value.trim();
+      const premium = document.getElementById('p_premium').value;
+      const due = document.getElementById('p_due').value;
+      if (!company || !no) return alert('Company and Policy number required');
+      policies.push({ client, company, no, premium, due });
+      localStorage.setItem('vpm_pol', JSON.stringify(policies));
+      renderPolicies();
+      document.getElementById('p_client').value = '';
+      document.getElementById('p_company').value = '';
+      document.getElementById('p_no').value = '';
+      document.getElementById('p_premium').value = '';
+      document.getElementById('p_due').value = '';
+    }
+
+    function renderPolicies() {
+      document.getElementById('list-policies').innerHTML = policies.map(p => `
+        <div class="card">
+          <strong>${p.company}</strong> (${p.client || 'Client'})<br>
+          <small>Policy: ${p.no} | Premium: ₹${Number(p.premium || 0).toLocaleString()}</small><br>
+          <span class="badge badge-due">Due Date: ${p.due || 'Not Set'}</span>
+        </div>
+      `).join('');
+    }
+
+    function saveInvestment() {
+      const type = document.getElementById('i_type').value;
+      const name = document.getElementById('i_name').value.trim();
+      const val = parseFloat(document.getElementById('i_val').value) || 0;
+      if (!name) return alert('Asset name required');
+      investments.push({ type, name, val });
+      localStorage.setItem('vpm_inv', JSON.stringify(investments));
+      renderInvest();
+      document.getElementById('i_name').value = '';
+      document.getElementById('i_val').value = '';
+    }
+
+    function renderInvest() {
+      let sum = 0;
+      document.getElementById('list-invest').innerHTML = investments.map(i => {
+        sum += i.val;
+        return `
+          <div class="card">
+            <strong>${i.name}</strong> <span class="badge" style="background:#e0f2fe;color:#0284c7;">${i.type}</span><br>
+            <span style="font-weight:700;">₹${i.val.toLocaleString()}</span>
+          </div>
+        `;
+      }).join('');
+      document.getElementById('total-val').innerText = '₹' + sum.toLocaleString();
+    }
+
+    function calculateAdvice() {
+      const total = parseFloat(document.getElementById('adv_input').value) || 0;
+      document.getElementById('adv_equity').innerText = '₹' + (total * 0.5).toLocaleString() + ' / month';
+      document.getElementById('adv_debt').innerText = '₹' + (total * 0.3).toLocaleString() + ' / month';
+      document.getElementById('adv_emergency').innerText = '₹' + (total * 0.2).toLocaleString() + ' / month';
+    }
+
+    renderCustomers();
+    renderPolicies();
+    renderInvest();
+    calculateAdvice();
+  </script>
+</body>
+</html>
+
