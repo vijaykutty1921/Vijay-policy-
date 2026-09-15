@@ -3,119 +3,218 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Policy &amp; Investment Manager</title>
+  <title>Policy & Investment Advisor Pro</title>
   <style>
-    :root { --primary: #0f172a; --brand: #2563eb; --bg: #f1f5f9; --card: #ffffff; --text: #0f172a; }
+    :root {
+      --primary: #0f172a;
+      --brand: #2563eb;
+      --accent: #10b981;
+      --warn: #ef4444;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background: var(--bg); color: var(--text); padding-bottom: 70px; }
-    header { background: var(--primary); color: #fff; padding: 16px; text-align: center; font-size: 1.15rem; font-weight: 700; position: sticky; top: 0; z-index: 10; }
-    .container { padding: 14px; max-width: 600px; margin: auto; }
-    .card { background: var(--card); border-radius: 10px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; }
+    body { background: var(--bg); color: var(--text); padding-bottom: 80px; }
+    header { background: var(--primary); color: #fff; padding: 16px; text-align: center; font-size: 1.15rem; font-weight: 700; position: sticky; top: 0; z-index: 10; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .container { padding: 16px; max-width: 700px; margin: auto; }
+    .card { background: var(--card); border-radius: 10px; padding: 16px; margin-bottom: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid var(--border); }
     h3 { font-size: 1.1rem; margin-bottom: 12px; color: var(--primary); }
-    h4 { font-size: 0.95rem; margin-bottom: 10px; }
-    input, select, button { width: 100%; padding: 10px; margin-top: 4px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.9rem; }
-    button.btn-primary { background: var(--brand); color: #fff; border: none; font-weight: 600; cursor: pointer; }
-    .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 56px; background: #ffffff; display: flex; border-top: 1px solid #cbd5e1; z-index: 20; }
-    .nav-btn { flex: 1; border: none; background: transparent; font-weight: 600; font-size: 0.8rem; color: #64748b; cursor: pointer; }
+    h4 { font-size: 0.95rem; margin-bottom: 8px; color: var(--brand); }
+    label { font-size: 0.8rem; font-weight: 600; color: var(--muted); display: block; margin-top: 8px; }
+    input, select, button { width: 100%; padding: 10px; margin-top: 4px; border-radius: 6px; border: 1px solid var(--border); font-size: 0.9rem; }
+    button.btn-primary { background: var(--brand); color: #fff; border: none; font-weight: 600; cursor: pointer; margin-top: 12px; }
+    button.btn-accent { background: var(--accent); color: #fff; border: none; font-weight: 600; cursor: pointer; margin-top: 8px; }
+    .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 60px; background: #ffffff; display: flex; border-top: 1px solid var(--border); z-index: 20; }
+    .nav-btn { flex: 1; border: none; background: transparent; font-weight: 600; font-size: 0.75rem; color: var(--muted); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
     .nav-btn.active { color: var(--brand); border-top: 3px solid var(--brand); }
-    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; }
-    .badge-due { background: #fee2e2; color: #dc2626; }
+    .badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; }
+    .badge-due { background: #fee2e2; color: var(--warn); }
+    .badge-ok { background: #dcfce7; color: var(--accent); }
+    .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+    .metric-box { background: #f1f5f9; padding: 10px; border-radius: 6px; text-align: center; }
+    .metric-box span { font-size: 0.75rem; color: var(--muted); }
+    .metric-box strong { display: block; font-size: 1.1rem; color: var(--primary); margin-top: 2px; }
+    .proposal-sheet { background: #ffffff; border: 2px dashed var(--brand); padding: 16px; border-radius: 8px; margin-top: 14px; }
     .hidden { display: none; }
+    @media print {
+      body { padding-bottom: 0; background: #fff; }
+      .nav-bar, header, button, input, select { display: none !important; }
+      .proposal-sheet { border: 1px solid #000; box-shadow: none; }
+    }
   </style>
 </head>
 <body>
 
-  <header>Policy &amp; Investment Manager</header>
+  <header>Policy &amp; Wealth Advisor Pro</header>
 
   <div class="container">
-    <!-- SECTION 1: CUSTOMERS -->
-    <div id="view-customers">
-      <h3>Customer Directory</h3>
-      <div class="card">
-        <h4>Register New Customer</h4>
-        <input id="c_name" placeholder="Full Name" />
-        <input id="c_phone" placeholder="Phone Number" type="tel" />
-        <input id="c_pan" placeholder="PAN Number" />
-        <input id="c_id" placeholder="Government ID / Aadhaar Ref" />
-        <button class="btn-primary" onclick="saveCustomer()">Save Customer</button>
-      </div>
-      <div id="list-customers"></div>
-    </div>
 
-    <!-- SECTION 2: POLICIES -->
-    <div id="view-policies" class="hidden">
-      <h3>Policy Tracking &amp; Renewals</h3>
+    <!-- 1. LIFE INSURANCE TOOLS -->
+    <div id="view-insurance">
+      <h3>Life Insurance Suite</h3>
+      
+      <!-- HLV Calculator -->
+      <div class="card">
+        <h4>Human Life Value (HLV) Calculator</h4>
+        <label>Client Annual Income (₹):</label>
+        <input id="hlv-income" type="number" value="800000" />
+        <label>Current Age:</label>
+        <input id="hlv-age" type="number" value="32" />
+        <label>Expected Retirement Age:</label>
+        <input id="hlv-retire" type="number" value="60" />
+        <label>Existing Total Liabilities / Loans (₹):</label>
+        <input id="hlv-debt" type="number" value="2500000" />
+        <label>Existing Life Insurance Cover (₹):</label>
+        <input id="hlv-existing-cover" type="number" value="1000000" />
+        <button class="btn-primary" onclick="calculateHLV()">Calculate Protection Gap</button>
+        
+        <div id="hlv-result" class="metric-grid hidden" style="margin-top: 14px;">
+          <div class="metric-box">
+            <span>Ideal Life Cover</span>
+            <strong id="res-ideal-cover">₹0</strong>
+          </div>
+          <div class="metric-box">
+            <span>Insurance Deficit / Gap</span>
+            <strong id="res-gap" style="color: var(--warn);">₹0</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Policy Record -->
       <div class="card">
         <h4>Add Policy Record</h4>
-        <input id="p_client" placeholder="Customer Name" />
-        <input id="p_company" placeholder="Company (e.g., HDFC Life, LIC)" />
-        <input id="p_no" placeholder="Policy Number" />
-        <input id="p_premium" placeholder="Premium Amount (₹)" type="number" />
-        <label style="font-size: 0.8rem; color: #475569;">Renewal Due Date:</label>
-        <input id="p_due" type="date" />
-        <button class="btn-primary" onclick="savePolicy()">Save Policy</button>
+        <label>Client Name:</label>
+        <input id="pol-client" placeholder="e.g., Ramesh Sundaram" />
+        <label>Insurance Provider & Plan:</label>
+        <input id="pol-provider" placeholder="e.g., HDFC Life / Click 2 Wealth" />
+        <label>Policy Number:</label>
+        <input id="pol-no" placeholder="POL-123456" />
+        <label>Premium Amount (₹):</label>
+        <input id="pol-prem" type="number" placeholder="50000" />
+        <label>Renewal Due Date:</label>
+        <input id="pol-due" type="date" />
+        <button class="btn-accent" onclick="savePolicyRecord()">Save Policy</button>
       </div>
-      <div id="list-policies"></div>
+
+      <div id="policy-records-list"></div>
     </div>
 
-    <!-- SECTION 3: INVESTMENT REVIEW -->
+    <!-- 2. EXISTING INVESTMENT REVIEW -->
     <div id="view-review" class="hidden">
-      <h3>Existing Portfolio Review</h3>
+      <h3>Existing Portfolio Diagnostics</h3>
       <div class="card" style="background: #eff6ff; border-color: #bfdbfe;">
-        <div>Total Portfolio Valuation</div>
-        <div id="total-val" style="font-size: 1.6rem; font-weight: 800; color: #1e3a8a; margin: 4px 0;">₹0</div>
-        <small style="color: #16a34a; font-weight: 600;">Status: Tracking Active Assets</small>
+        <div>Total Net Portfolio Value</div>
+        <div id="portfolio-total" style="font-size: 1.8rem; font-weight: 800; color: #1e3a8a;">₹0</div>
+        <div id="portfolio-profit" style="font-size: 0.85rem; font-weight: 600; color: var(--accent);">Returns: 0%</div>
       </div>
+
+      <!-- Add Holding -->
       <div class="card">
-        <h4>Add Asset / Holding</h4>
-        <select id="i_type">
-          <option>Mutual Fund (Equity/Debt)</option>
-          <option>Insurance Cash Value / ULIP</option>
-          <option>Fixed Deposit</option>
-          <option>Direct Equities / Stocks</option>
+        <h4>Asset Entry</h4>
+        <label>Asset Category:</label>
+        <select id="inv-type">
+          <option value="Equity MF">Mutual Fund (Equity/SIP)</option>
+          <option value="Debt/FD">Fixed Deposit / Debt Fund</option>
+          <option value="ULIP">ULIP / Insurance Cash Value</option>
+          <option value="Stocks">Direct Equities</option>
+          <option value="Gold/Govt">Sovereign Gold / PPF</option>
         </select>
-        <input id="i_name" placeholder="Fund or Bank Name" />
-        <input id="i_val" placeholder="Current Value (₹)" type="number" />
-        <button class="btn-primary" onclick="saveInvestment()">Add Asset</button>
+        <label>Holding / Scheme Name:</label>
+        <input id="inv-name" placeholder="e.g. Parag Parikh Flexi Cap" />
+        <div class="metric-grid">
+          <div>
+            <label>Invested Cost (₹):</label>
+            <input id="inv-cost" type="number" placeholder="100000" />
+          </div>
+          <div>
+            <label>Current Value (₹):</label>
+            <input id="inv-val" type="number" placeholder="128000" />
+          </div>
+        </div>
+        <button class="btn-primary" onclick="addAssetHolding()">Add Asset</button>
       </div>
-      <div id="list-invest"></div>
+
+      <div id="asset-records-list"></div>
     </div>
 
-    <!-- SECTION 4: FUTURE SUGGESTIONS -->
-    <div id="view-advisor" class="hidden">
-      <h3>Future Investment Advisor</h3>
+    <!-- 3. FUTURE INVESTMENT ADVISOR & PRESENTATION GENERATOR -->
+    <div id="view-proposal" class="hidden">
+      <h3>Client Presentation Generator</h3>
+      
       <div class="card">
-        <label style="font-weight: 600; font-size: 0.85rem;">Monthly Surplus to Invest (₹):</label>
-        <input id="adv_input" type="number" value="15000" oninput="calculateAdvice()" />
+        <h4>Presentation Setup</h4>
+        <label>Client Name:</label>
+        <input id="prop-client" value="Vijay Kutty" />
+        <label>Monthly Surplus Available (₹):</label>
+        <input id="prop-surplus" type="number" value="25000" />
+        <label>Primary Goal:</label>
+        <select id="prop-goal">
+          <option>Retirement & Financial Independence (15+ Years)</option>
+          <option>Child Higher Education (10-12 Years)</option>
+          <option>Wealth Creation & Legacy (20+ Years)</option>
+        </select>
+        <button class="btn-primary" onclick="generatePresentation()">Generate Client Presentation</button>
       </div>
-      <div class="card">
-        <strong>1. Pure Term Protection</strong>
-        <p style="font-size: 0.85rem; color: #475569; margin-top: 4px;">Baseline priority: Ensure life cover of 10x-15x annual income before expanding equities.</p>
-      </div>
-      <div class="card">
-        <strong>2. Equity Mutual Funds (50%)</strong>
-        <div id="adv_equity" style="font-size: 1.1rem; font-weight: 700; color: var(--brand); margin: 4px 0;">₹7,500 / month</div>
-        <p style="font-size: 0.85rem; color: #475569;">Allocate across Flexi-cap &amp; Large-cap index funds for inflation-beating long-term growth.</p>
-      </div>
-      <div class="card">
-        <strong>3. Safe Debt &amp; PPF (30%)</strong>
-        <div id="adv_debt" style="font-size: 1.1rem; font-weight: 700; color: var(--brand); margin: 4px 0;">₹4,500 / month</div>
-        <p style="font-size: 0.85rem; color: #475569;">Capital protection via PPF, Voluntary PF, or Bank FDs.</p>
-      </div>
-      <div class="card">
-        <strong>4. Emergency Reserve (20%)</strong>
-        <div id="adv_emergency" style="font-size: 1.1rem; font-weight: 700; color: var(--brand); margin: 4px 0;">₹3,000 / month</div>
-        <p style="font-size: 0.85rem; color: #475569;">Maintain accessible liquid funds covering 6 months of household expenses.</p>
+
+      <!-- Presentation Output Sheet -->
+      <div id="proposal-output" class="proposal-sheet hidden">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid var(--primary); padding-bottom: 8px;">
+          <div>
+            <h2 id="sheet-client" style="font-size: 1.2rem; color: var(--primary);">Investment Proposal</h2>
+            <small style="color: var(--muted);">Prepared by Vijay Policy &amp; Wealth Manager</small>
+          </div>
+          <button class="btn-primary" style="width: auto; padding: 6px 12px; margin:0;" onclick="window.print()">Print Proposal</button>
+        </div>
+
+        <div style="margin: 12px 0;">
+          <strong>Target Goal:</strong> <span id="sheet-goal">Wealth Creation</span><br>
+          <strong>Proposed Monthly SIP / Allocation:</strong> <span id="sheet-amt" style="font-weight: bold; color: var(--brand);">₹0</span>
+        </div>
+
+        <h4 style="margin-top: 14px;">Recommended Asset Distribution</h4>
+        <div class="metric-grid">
+          <div class="metric-box">
+            <span>Equity Growth (50%)</span>
+            <strong id="alloc-eq">₹0</strong>
+            <small>Flexi &amp; Large-cap Index</small>
+          </div>
+          <div class="metric-box">
+            <span>Guaranteed/Debt (30%)</span>
+            <strong id="alloc-debt">₹0</strong>
+            <small>PPF / Target Maturity</small>
+          </div>
+        </div>
+
+        <div class="metric-grid" style="margin-top: 8px;">
+          <div class="metric-box">
+            <span>Pure Risk Cover</span>
+            <strong id="alloc-term">Recommended</strong>
+            <small>Min 15x Annual Income</small>
+          </div>
+          <div class="metric-box">
+            <span>Liquid Contingency (20%)</span>
+            <strong id="alloc-liq">₹0</strong>
+            <small>High-yield emergency fund</small>
+          </div>
+        </div>
+
+        <div style="margin-top: 14px; padding: 10px; background: #f8fafc; border-left: 4px solid var(--brand); font-size: 0.85rem;">
+          <strong>Projected 15-Year Corpus:</strong> <span id="proj-corpus" style="font-weight: bold; font-size: 1rem; color: var(--accent);">₹0</span><br>
+          <small>(Assumed blended portfolio return of 12.5% CAGR on equity &amp; 7% on debt)</small>
+        </div>
       </div>
     </div>
+
   </div>
 
-  <!-- BOTTOM NAVIGATION -->
+  <!-- NAVIGATION BAR -->
   <div class="nav-bar">
-    <button class="nav-btn active" onclick="showTab('customers', this)">Customers</button>
-    <button class="nav-btn" onclick="showTab('policies', this)">Policies</button>
-    <button class="nav-btn" onclick="showTab('review', this)">Review</button>
-    <button class="nav-btn" onclick="showTab('advisor', this)">Advisor</button>
+    <button class="nav-btn active" onclick="switchTab('insurance', this)">Insurance</button>
+    <button class="nav-btn" onclick="switchTab('review', this)">Diagnostics</button>
+    <button class="nav-btn" onclick="switchTab('proposal', this)">Presentation</button>
   </div>
 
   <script>
@@ -123,108 +222,139 @@
       navigator.serviceWorker.register('./sw.js');
     }
 
-    let customers = JSON.parse(localStorage.getItem('vpm_cust') || '[]');
-    let policies = JSON.parse(localStorage.getItem('vpm_pol') || '[]');
-    let investments = JSON.parse(localStorage.getItem('vpm_inv') || '[]');
+    let policies = JSON.parse(localStorage.getItem('vpm_pol_records') || '[]');
+    let assets = JSON.parse(localStorage.getItem('vpm_asset_records') || '[]');
 
-    function showTab(name, btn) {
-      ['customers', 'policies', 'review', 'advisor'].forEach(t => {
-        document.getElementById('view-' + t).classList.add('hidden');
+    function switchTab(viewId, el) {
+      ['insurance', 'review', 'proposal'].forEach(v => {
+        document.getElementById('view-' + v).classList.add('hidden');
       });
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById('view-' + name).classList.remove('hidden');
-      btn.classList.add('active');
+      document.getElementById('view-' + viewId).classList.remove('hidden');
+      el.classList.add('active');
     }
 
-    function saveCustomer() {
-      const name = document.getElementById('c_name').value.trim();
-      const phone = document.getElementById('c_phone').value.trim();
-      const pan = document.getElementById('c_pan').value.trim();
-      const id = document.getElementById('c_id').value.trim();
-      if (!name) return alert('Name is required');
-      customers.push({ name, phone, pan, id });
-      localStorage.setItem('vpm_cust', JSON.stringify(customers));
-      renderCustomers();
-      document.getElementById('c_name').value = '';
-      document.getElementById('c_phone').value = '';
-      document.getElementById('c_pan').value = '';
-      document.getElementById('c_id').value = '';
+    // 1. HLV Logic
+    function calculateHLV() {
+      const income = parseFloat(document.getElementById('hlv-income').value) || 0;
+      const age = parseFloat(document.getElementById('hlv-age').value) || 0;
+      const retire = parseFloat(document.getElementById('hlv-retire').value) || 60;
+      const debt = parseFloat(document.getElementById('hlv-debt').value) || 0;
+      const existing = parseFloat(document.getElementById('hlv-existing-cover').value) || 0;
+
+      const workingYears = Math.max(0, retire - age);
+      // Standard simplified HLV replacement formula: 70% personal income contribution capitalized
+      const grossIncomeRequirement = (income * 0.70) * workingYears;
+      const idealCover = grossIncomeRequirement + debt;
+      const protectionGap = Math.max(0, idealCover - existing);
+
+      document.getElementById('res-ideal-cover').innerText = '₹' + Math.round(idealCover).toLocaleString('en-IN');
+      document.getElementById('res-gap').innerText = '₹' + Math.round(protectionGap).toLocaleString('en-IN');
+      document.getElementById('hlv-result').classList.remove('hidden');
     }
 
-    function renderCustomers() {
-      document.getElementById('list-customers').innerHTML = customers.map(c => `
-        <div class="card">
-          <strong>${c.name}</strong><br>
-          <small>Phone: ${c.phone || 'N/A'} | PAN: ${c.pan || 'N/A'}</small>
-        </div>
-      `).join('');
-    }
+    // 2. Policies
+    function savePolicyRecord() {
+      const client = document.getElementById('pol-client').value.trim();
+      const provider = document.getElementById('pol-provider').value.trim();
+      const no = document.getElementById('pol-no').value.trim();
+      const prem = document.getElementById('pol-prem').value;
+      const due = document.getElementById('pol-due').value;
 
-    function savePolicy() {
-      const client = document.getElementById('p_client').value.trim();
-      const company = document.getElementById('p_company').value.trim();
-      const no = document.getElementById('p_no').value.trim();
-      const premium = document.getElementById('p_premium').value;
-      const due = document.getElementById('p_due').value;
-      if (!company || !no) return alert('Company and Policy number required');
-      policies.push({ client, company, no, premium, due });
-      localStorage.setItem('vpm_pol', JSON.stringify(policies));
+      if (!client || !provider) return alert('Enter Client and Provider details.');
+      policies.push({ client, provider, no, prem, due });
+      localStorage.setItem('vpm_pol_records', JSON.stringify(policies));
       renderPolicies();
-      document.getElementById('p_client').value = '';
-      document.getElementById('p_company').value = '';
-      document.getElementById('p_no').value = '';
-      document.getElementById('p_premium').value = '';
-      document.getElementById('p_due').value = '';
+
+      document.getElementById('pol-client').value = '';
+      document.getElementById('pol-provider').value = '';
+      document.getElementById('pol-no').value = '';
+      document.getElementById('pol-prem').value = '';
+      document.getElementById('pol-due').value = '';
     }
 
     function renderPolicies() {
-      document.getElementById('list-policies').innerHTML = policies.map(p => `
+      document.getElementById('policy-records-list').innerHTML = policies.map(p => `
         <div class="card">
-          <strong>${p.company}</strong> (${p.client || 'Client'})<br>
-          <small>Policy: ${p.no} | Premium: ₹${Number(p.premium || 0).toLocaleString()}</small><br>
-          <span class="badge badge-due">Due Date: ${p.due || 'Not Set'}</span>
+          <strong>${p.provider}</strong> (${p.client})<br>
+          <small>Policy: ${p.no} | Premium: ₹${Number(p.prem || 0).toLocaleString('en-IN')}</small><br>
+          <span class="badge ${p.due ? 'badge-due' : 'badge-ok'}">Renewal: ${p.due || 'Open'}</span>
         </div>
       `).join('');
     }
 
-    function saveInvestment() {
-      const type = document.getElementById('i_type').value;
-      const name = document.getElementById('i_name').value.trim();
-      const val = parseFloat(document.getElementById('i_val').value) || 0;
-      if (!name) return alert('Asset name required');
-      investments.push({ type, name, val });
-      localStorage.setItem('vpm_inv', JSON.stringify(investments));
-      renderInvest();
-      document.getElementById('i_name').value = '';
-      document.getElementById('i_val').value = '';
+    // 3. Investment Review & Diagnostic
+    function addAssetHolding() {
+      const type = document.getElementById('inv-type').value;
+      const name = document.getElementById('inv-name').value.trim();
+      const cost = parseFloat(document.getElementById('inv-cost').value) || 0;
+      const val = parseFloat(document.getElementById('inv-val').value) || 0;
+
+      if (!name) return alert('Enter Scheme / Asset Name');
+      assets.push({ type, name, cost, val });
+      localStorage.setItem('vpm_asset_records', JSON.stringify(assets));
+      renderAssets();
+
+      document.getElementById('inv-name').value = '';
+      document.getElementById('inv-cost').value = '';
+      document.getElementById('inv-val').value = '';
     }
 
-    function renderInvest() {
-      let sum = 0;
-      document.getElementById('list-invest').innerHTML = investments.map(i => {
-        sum += i.val;
+    function renderAssets() {
+      let totalCost = 0;
+      let totalVal = 0;
+
+      document.getElementById('asset-records-list').innerHTML = assets.map(a => {
+        totalCost += a.cost;
+        totalVal += a.val;
+        const gain = a.val - a.cost;
+        const gainPct = a.cost > 0 ? ((gain / a.cost) * 100).toFixed(1) : 0;
         return `
           <div class="card">
-            <strong>${i.name}</strong> <span class="badge" style="background:#e0f2fe;color:#0284c7;">${i.type}</span><br>
-            <span style="font-weight:700;">₹${i.val.toLocaleString()}</span>
+            <strong>${a.name}</strong> <span class="badge" style="background:#e0f2fe;color:#0284c7;">${a.type}</span><br>
+            <div style="display:flex; justify-content:space-between; margin-top:4px;">
+              <span>Current: <strong>₹${a.val.toLocaleString('en-IN')}</strong></span>
+              <span style="color:${gain >= 0 ? '#16a34a' : '#ef4444'}; font-weight:600;">${gain >= 0 ? '+' : ''}${gainPct}%</span>
+            </div>
           </div>
         `;
       }).join('');
-      document.getElementById('total-val').innerText = '₹' + sum.toLocaleString();
+
+      document.getElementById('portfolio-total').innerText = '₹' + totalVal.toLocaleString('en-IN');
+      const totalGain = totalVal - totalCost;
+      const totalGainPct = totalCost > 0 ? ((totalGain / totalCost) * 100).toFixed(1) : 0;
+      document.getElementById('portfolio-profit').innerText = `Invested: ₹${totalCost.toLocaleString('en-IN')} | Total Profit/Loss: ${totalGainPct}%`;
     }
 
-    function calculateAdvice() {
-      const total = parseFloat(document.getElementById('adv_input').value) || 0;
-      document.getElementById('adv_equity').innerText = '₹' + (total * 0.5).toLocaleString() + ' / month';
-      document.getElementById('adv_debt').innerText = '₹' + (total * 0.3).toLocaleString() + ' / month';
-      document.getElementById('adv_emergency').innerText = '₹' + (total * 0.2).toLocaleString() + ' / month';
+    // 4. Presentation Generator
+    function generatePresentation() {
+      const client = document.getElementById('prop-client').value || 'Valued Client';
+      const surplus = parseFloat(document.getElementById('prop-surplus').value) || 0;
+      const goal = document.getElementById('prop-goal').value;
+
+      document.getElementById('sheet-client').innerText = `Portfolio & Wealth Proposal: ${client}`;
+      document.getElementById('sheet-goal').innerText = goal;
+      document.getElementById('sheet-amt').innerText = '₹' + surplus.toLocaleString('en-IN') + ' / month';
+
+      const eq = surplus * 0.50;
+      const debt = surplus * 0.30;
+      const liq = surplus * 0.20;
+
+      document.getElementById('alloc-eq').innerText = '₹' + eq.toLocaleString('en-IN') + ' / mo';
+      document.getElementById('alloc-debt').innerText = '₹' + debt.toLocaleString('en-IN') + ' / mo';
+      document.getElementById('alloc-liq').innerText = '₹' + liq.toLocaleString('en-IN') + ' / mo';
+
+      // Compound calculation for 15 years @ 11% average weighted return
+      const n = 15 * 12;
+      const r = 0.11 / 12;
+      const futureCorpus = surplus * ((Math.pow(1 + r, n) - 1) / r) * (1 + r);
+
+      document.getElementById('proj-corpus').innerText = '₹' + Math.round(futureCorpus).toLocaleString('en-IN');
+      document.getElementById('proposal-output').classList.remove('hidden');
     }
 
-    renderCustomers();
     renderPolicies();
-    renderInvest();
-    calculateAdvice();
+    renderAssets();
   </script>
 </body>
 </html>
-
